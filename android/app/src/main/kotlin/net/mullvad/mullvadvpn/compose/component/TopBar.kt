@@ -224,6 +224,41 @@ fun MullvadMediumTopBar(
     )
 }
 
+@Composable
+fun MullvadMediumTopBar(
+    title: String,
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    switch: @Composable () -> Unit = {}, // New parameter for the switch
+    scrollBehavior: TopAppBarScrollBehavior? = null
+) {
+    MediumTopAppBar(
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(end = Dimens.mediumPadding),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+                switch()
+            }
+        },
+        navigationIcon = navigationIcon,
+        scrollBehavior = scrollBehavior,
+        colors =
+            TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary.copy(AlphaTopBar),
+            ),
+        actions = actions
+    )
+}
+
 @Preview
 @Composable
 private fun PreviewMullvadTopBarWithLongDeviceName() {

@@ -69,11 +69,7 @@ class SplitTunnelingViewModel(
     val uiState =
         vmState
             .map(SplitTunnelingViewModelState::toUiState)
-            .stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(),
-                SplitTunnelingUiState.Loading
-            )
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SplitTunnelingUiState())
 
     init {
         viewModelScope.launch(dispatcher) {
