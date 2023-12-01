@@ -3,7 +3,7 @@ package net.mullvad.mullvadvpn.compose.state
 import net.mullvad.mullvadvpn.applist.AppData
 
 data class SplitTunnelingUiState(
-    val enabled: Boolean = false,
+    var enabled: Boolean = false,
     val appListState: AppListState = AppListState.Disabled
 )
 

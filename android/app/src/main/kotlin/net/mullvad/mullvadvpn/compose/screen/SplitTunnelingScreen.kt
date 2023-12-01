@@ -82,14 +82,13 @@ private fun PreviewSplitTunnelingScreen() {
 @OptIn(ExperimentalFoundationApi::class)
 fun SplitTunnelingScreen(
     uiState: SplitTunnelingUiState = SplitTunnelingUiState(),
+    onShowSplitTunneling: (Boolean) -> Unit = {},
     onShowSystemAppsClick: (show: Boolean) -> Unit = {},
     onExcludeAppClick: (packageName: String) -> Unit = {},
     onIncludeAppClick: (packageName: String) -> Unit = {},
     onBackClick: () -> Unit = {},
     onResolveIcon: (String) -> Bitmap? = { null },
 ) {
-    var isSwitchToggled by remember { mutableStateOf(false) }
-    var isSwitchEnabled by remember { mutableStateOf(true) }
 
     val focusManager = LocalFocusManager.current
 
@@ -98,12 +97,9 @@ fun SplitTunnelingScreen(
         appBarTitle = stringResource(id = R.string.split_tunneling),
         switch = {
             MullvadSwitch(
-                checked = isSwitchToggled,
-                enabled = isSwitchEnabled,
-                onCheckedChange = { isChecked ->
-                    // Update the state when the switch state changes
-                    isSwitchToggled = isChecked
-                }
+                checked = true,
+                enabled = uiState.enabled,
+                onCheckedChange = onShowSplitTunneling
             )
         },
         navigationIcon = { NavigateBackIconButton(onBackClick) }
@@ -127,6 +123,7 @@ fun SplitTunnelingScreen(
                     )
                 }
             }
+
             when (val appList = uiState.appListState) {
                 AppListState.Loading -> {
                     item(key = CommonContentKey.PROGRESS, contentType = ContentType.PROGRESS) {

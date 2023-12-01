@@ -50,20 +50,22 @@ class SplitTunnelingViewModel(
             .flatMapLatest { serviceConnection ->
                 combine(
                     serviceConnection.splitTunneling.excludedAppsCallbackFlow(),
+                    serviceConnection.splitTunneling.enabledCallbackFlow(),
                     allApps,
-                    showSystemApps
-                ) { excludedApps, allApps, showSystemApps ->
+                    showSystemApps,
+                ) { excludedApps, enabled, allApps, showSystemApps ->
                     SplitTunnelingViewModelState(
                         excludedApps = excludedApps,
+                        enabled = enabled,
                         allApps = allApps,
-                        showSystemApps = showSystemApps
+                        showSystemApps = showSystemApps,
                     )
                 }
             }
             .stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(),
-                SplitTunnelingViewModelState()
+                SplitTunnelingViewModelState(),
             )
 
     val uiState =
@@ -73,9 +75,6 @@ class SplitTunnelingViewModel(
 
     init {
         viewModelScope.launch(dispatcher) {
-            if (serviceConnectionManager.splitTunneling()?.enabled == false) {
-                serviceConnectionManager.splitTunneling()?.enabled = true
-            }
             fetchApps()
         }
     }
@@ -97,6 +96,12 @@ class SplitTunnelingViewModel(
         }
     }
 
+    fun onShowAppList(show: Boolean) {
+        viewModelScope.launch(dispatcher) {
+            serviceConnectionManager.splitTunneling()?.enableSplitTunneling(show)
+        }
+    }
+
     fun onShowSystemAppsClick(show: Boolean) {
         viewModelScope.launch(dispatcher) { showSystemApps.emit(show) }
     }
@@ -108,5 +113,10 @@ class SplitTunnelingViewModel(
     private fun SplitTunneling.excludedAppsCallbackFlow() = callbackFlow {
         excludedAppsChange = { apps -> trySend(apps) }
         awaitClose { emptySet<String>() }
+    }
+
+    private fun SplitTunneling.enabledCallbackFlow() = callbackFlow {
+        enabledChange = { isEnable -> trySend(isEnable) }
+        awaitClose { false }
     }
 }
