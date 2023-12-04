@@ -235,7 +235,7 @@ fun MullvadMediumTopBar(
     MediumTopAppBar(
         title = {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(end = Dimens.mediumPadding),
+                modifier = Modifier.padding(end = Dimens.mediumPadding),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -245,7 +245,10 @@ fun MullvadMediumTopBar(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f)
                 )
-                switch()
+
+                if (scrollBehavior?.state?.collapsedFraction == 0f) {
+                    switch()
+                }
             }
         },
         navigationIcon = navigationIcon,

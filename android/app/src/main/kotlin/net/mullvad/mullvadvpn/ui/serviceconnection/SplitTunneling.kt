@@ -10,8 +10,7 @@ class SplitTunneling(private val connection: Messenger, eventDispatcher: EventDi
     private var _excludedApps by
         observable(emptySet<String>()) { _, _, apps -> excludedAppsChange.invoke(apps) }
 
-    private var enabled by observable(false
-    ) { _, _, isEnabled -> enabledChange.invoke(isEnabled) }
+    private var enabled by observable(false) { _, _, isEnabled -> enabledChange.invoke(isEnabled) }
 
     var enabledChange: (enabled: Boolean) -> Unit = {}
         set(value) {
@@ -44,6 +43,6 @@ class SplitTunneling(private val connection: Messenger, eventDispatcher: EventDi
 
     fun persist() = connection.send(Request.PersistExcludedApps.message)
 
-    fun enableSplitTunneling(isEnabled: Boolean) = connection.send(Request.SetEnableSplitTunneling(isEnabled).message)
-
+    fun enableSplitTunneling(isEnabled: Boolean) =
+        connection.send(Request.SetEnableSplitTunneling(isEnabled).message)
 }

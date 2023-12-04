@@ -5,47 +5,31 @@ import net.mullvad.mullvadvpn.compose.state.AppListState
 import net.mullvad.mullvadvpn.compose.state.SplitTunnelingUiState
 
 data class SplitTunnelingViewModelState(
-    val enabled: Boolean = false,
+    val checked: Boolean = false,
     val excludedApps: Set<String> = emptySet(),
     val allApps: List<AppData>? = null,
     val showSystemApps: Boolean = false
 ) {
     fun toUiState(): SplitTunnelingUiState {
-        return if (enabled) {
-            allApps?.let { apps ->
-                val (excluded, included) = apps.partition { appData -> excludedApps.contains(appData.packageName) }
-                SplitTunnelingUiState(
-                    enabled = true,
-                    appListState = AppListState.ShowAppList(
-                        excludedApps = excluded.sortedBy { it.name },
-                        includedApps = if (showSystemApps) included else included.filter { !it.isSystemApp }.sortedBy { it.name },
-                        showSystemApps = showSystemApps
+        return if (checked) {
+            allApps
+                ?.partition { appData -> excludedApps.contains(appData.packageName) }
+                ?.let { (excluded, included) ->
+                    SplitTunnelingUiState(
+                        checked = true,
+                        appListState =
+                            AppListState.ShowAppList(
+                                excludedApps = excluded.sortedBy { it.name },
+                                includedApps =
+                                    if (showSystemApps) included
+                                    else included.filter { !it.isSystemApp }.sortedBy { it.name },
+                                showSystemApps = showSystemApps
+                            )
                     )
-                )
-            }
-            ?: SplitTunnelingUiState(enabled = false, appListState = AppListState.Disabled)
+                }
+                ?: SplitTunnelingUiState(checked = false, appListState = AppListState.Disabled)
         } else {
-            SplitTunnelingUiState(enabled = false, appListState = AppListState.Disabled)
+            SplitTunnelingUiState(checked = false, appListState = AppListState.Disabled)
         }
     }
 }
-
-//allApps
-//?.partition { appData -> excludedApps.contains(appData.packageName) }
-//?.let { (excluded, included) ->
-//    SplitTunnelingUiState(
-//        enabled = true,
-//        appListState =
-//        AppListState.ShowAppList(
-//            excludedApps = excluded.sortedBy { it.name },
-//            includedApps =
-//            if (showSystemApps) {
-//                included
-//            } else {
-//                included.filter { appData -> !appData.isSystemApp }
-//            }
-//                .sortedBy { it.name },
-//            showSystemApps = showSystemApps,
-//        ),
-//    )
-//}

@@ -56,7 +56,7 @@ class SplitTunnelingViewModel(
                 ) { excludedApps, enabled, allApps, showSystemApps ->
                     SplitTunnelingViewModelState(
                         excludedApps = excludedApps,
-                        enabled = enabled,
+                        checked = enabled,
                         allApps = allApps,
                         showSystemApps = showSystemApps,
                     )
@@ -74,9 +74,7 @@ class SplitTunnelingViewModel(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SplitTunnelingUiState())
 
     init {
-        viewModelScope.launch(dispatcher) {
-            fetchApps()
-        }
+        viewModelScope.launch(dispatcher) { fetchApps() }
     }
 
     override fun onCleared() {
