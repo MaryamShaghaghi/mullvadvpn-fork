@@ -45,6 +45,7 @@ import net.mullvad.mullvadvpn.compose.cell.HeaderSwitchComposeCell
 import net.mullvad.mullvadvpn.compose.cell.InformationComposeCell
 import net.mullvad.mullvadvpn.compose.cell.MtuComposeCell
 import net.mullvad.mullvadvpn.compose.cell.MtuSubtitle
+import net.mullvad.mullvadvpn.compose.cell.NavigationComposeCell
 import net.mullvad.mullvadvpn.compose.cell.NormalSwitchComposeCell
 import net.mullvad.mullvadvpn.compose.cell.SelectableCell
 import net.mullvad.mullvadvpn.compose.cell.SwitchComposeSubtitleCell
@@ -143,6 +144,7 @@ fun VpnSettingsScreen(
     onRestoreMtuClick: () -> Unit = {},
     onCancelMtuDialogClick: () -> Unit = {},
     onToggleAutoConnect: (Boolean) -> Unit = {},
+    onAutoConnectClick: () -> Unit = {},
     onToggleLocalNetworkSharing: (Boolean) -> Unit = {},
     onToggleDnsClick: (Boolean) -> Unit = {},
     onToggleBlockAds: (Boolean) -> Unit = {},
@@ -283,6 +285,18 @@ fun VpnSettingsScreen(
             }
             item {
                 SwitchComposeSubtitleCell(text = stringResource(id = R.string.auto_connect_footer))
+            }
+            item {
+                Spacer(modifier = Modifier.height(Dimens.cellLabelVerticalPadding))
+                NavigationComposeCell(
+                    title = stringResource(id = R.string.auto_connect_and_lockdown_mode),
+                    onClick = { onAutoConnectClick() },
+                )
+            }
+            item {
+                SwitchComposeSubtitleCell(
+                    text = stringResource(id = R.string.auto_connect_and_lockdown_mode_footer)
+                )
             }
             item {
                 Spacer(modifier = Modifier.height(Dimens.cellLabelVerticalPadding))
