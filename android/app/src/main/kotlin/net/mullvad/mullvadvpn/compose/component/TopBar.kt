@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Surface
@@ -176,11 +177,22 @@ fun MullvadTopBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun PreviewMediumTopBar() {
     AppTheme {
         MullvadMediumTopBar(
+            title = "Title",
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewLargeTopBar() {
+    AppTheme {
+        MullvadLargeTopBar(
             title = "Title",
         )
     }
@@ -213,6 +225,27 @@ fun MullvadMediumTopBar(
 ) {
     MediumTopAppBar(
         title = { Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        navigationIcon = navigationIcon,
+        scrollBehavior = scrollBehavior,
+        colors =
+            TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary.copy(AlphaTopBar),
+            ),
+        actions = actions
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MullvadLargeTopBar(
+    title: String,
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    scrollBehavior: TopAppBarScrollBehavior? = null
+) {
+    LargeTopAppBar(
+        title = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
         navigationIcon = navigationIcon,
         scrollBehavior = scrollBehavior,
         colors =

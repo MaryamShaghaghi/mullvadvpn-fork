@@ -5,9 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -30,10 +27,10 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import kotlinx.coroutines.launch
 import net.mullvad.mullvadvpn.R
 import net.mullvad.mullvadvpn.lib.theme.AppTheme
@@ -52,86 +49,104 @@ fun AutoConnectCarousel() {
     val pagerState = rememberPagerState(pageCount = { 3 })
     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
         val scope = rememberCoroutineScope()
-        Column(
+        ConstraintLayout(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                modifier = Modifier.padding(horizontal = Dimens.largePadding),
-                text =
-                    when (page) {
-                        0 -> stringResource(id = R.string.carousel_slide_1_text_1)
-                        1 -> stringResource(id = R.string.carousel_slide_2_text_1)
-                        else -> stringResource(id = R.string.carousel_slide_3_text_1a)
-                    },
-                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription)
-            )
-            if (page == 2) {
-                HtmlText(
-                    modifier = Modifier.padding(horizontal = Dimens.largePadding),
-                    htmlFormattedString = textResource(id = R.string.carousel_slide_3_text_1b),
-                    textSize = 16.sp.value,
-                    textColor =
-                        MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription).toArgb()
-                )
-            }
-
-            Spacer(modifier = Modifier.padding(18.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (page != 0) {
-                    IconButton(
-                        onClick = {
-                            scope.launch { pagerState.scrollToPage(pagerState.currentPage - 1) }
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_chevron),
-                            contentDescription = null,
-                            tint = Color.Unspecified,
-                            modifier = Modifier.rotate(180f).alpha(0.6f)
-                        )
-                    }
-                } else {
-                    Spacer(modifier = Modifier.padding(18.dp))
-                }
-
-                Image(
-                    painter =
-                        when (page) {
-                            0 -> painterResource(id = R.drawable.carousel_slide_1_cogwheel)
-                            1 -> painterResource(id = R.drawable.carousel_slide_2_always_on)
-                            else ->
-                                painterResource(id = R.drawable.carousel_slide_3_block_connections)
-                        },
-                    contentDescription = null,
-                )
-
-                if (page != 2) {
-                    IconButton(
-                        onClick = {
-                            scope.launch { pagerState.scrollToPage(pagerState.currentPage + 1) }
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_chevron),
-                            contentDescription = null,
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(Dimens.titleIconSize).alpha(0.6f)
-                        )
-                    }
-                } else {
-                    Spacer(modifier = Modifier.padding(18.dp))
-                }
-            }
-
-            Spacer(modifier = Modifier.padding(3.dp))
+            val (
+                upperTextRef,
+                backButtonRef,
+                imageRef,
+                nextButtonRef,
+                lowerTextRef,
+                pageIndicatorRef) =
+                createRefs()
             HtmlText(
-                modifier = Modifier.padding(horizontal = Dimens.largePadding),
+                modifier =
+                    Modifier.padding(horizontal = Dimens.largePadding).constrainAs(upperTextRef) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(imageRef.top)
+                    },
+                htmlFormattedString =
+                    textResource(
+                        id =
+                            when (page) {
+                                0 -> R.string.carousel_slide_1_text_1
+                                1 -> R.string.carousel_slide_2_text_1
+                                else -> R.string.carousel_slide_3_text_1
+                            }
+                    ),
+                textSize = 16.sp.value,
+                textColor =
+                    MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription).toArgb()
+            )
+
+            if (page != 0) {
+                IconButton(
+                    modifier =
+                        Modifier.constrainAs(backButtonRef) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            bottom.linkTo(parent.bottom)
+                        },
+                    onClick = {
+                        scope.launch { pagerState.scrollToPage(pagerState.currentPage - 1) }
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_chevron),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier.rotate(180f).alpha(0.6f)
+                    )
+                }
+            }
+
+            Image(
+                modifier =
+                    Modifier.padding(top = 18.dp, bottom = 3.dp).constrainAs(imageRef) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    },
+                painter =
+                    when (page) {
+                        0 -> painterResource(id = R.drawable.carousel_slide_1_cogwheel)
+                        1 -> painterResource(id = R.drawable.carousel_slide_2_always_on)
+                        else -> painterResource(id = R.drawable.carousel_slide_3_block_connections)
+                    },
+                contentDescription = null,
+            )
+
+            if (page != 2) {
+                IconButton(
+                    modifier =
+                        Modifier.constrainAs(nextButtonRef) {
+                            top.linkTo(parent.top)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                        },
+                    onClick = {
+                        scope.launch { pagerState.scrollToPage(pagerState.currentPage + 1) }
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_chevron),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(Dimens.titleIconSize).alpha(0.6f)
+                    )
+                }
+            }
+
+            HtmlText(
+                modifier =
+                    Modifier.padding(horizontal = Dimens.largePadding).constrainAs(lowerTextRef) {
+                        top.linkTo(imageRef.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                    },
                 htmlFormattedString =
                     textResource(
                         id =
@@ -145,9 +160,14 @@ fun AutoConnectCarousel() {
                 textColor =
                     MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription).toArgb()
             )
-            Spacer(modifier = Modifier.padding(20.dp))
             Row(
-                Modifier.wrapContentHeight().fillMaxWidth().padding(bottom = 8.dp),
+                Modifier.wrapContentHeight().fillMaxWidth().padding(top = 20.dp).constrainAs(
+                    pageIndicatorRef
+                ) {
+                    top.linkTo(lowerTextRef.bottom)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.Bottom
             ) {
