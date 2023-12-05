@@ -36,6 +36,7 @@ import net.mullvad.mullvadvpn.usecase.VersionNotificationUseCase
 import net.mullvad.mullvadvpn.util.ChangelogDataProvider
 import net.mullvad.mullvadvpn.util.IChangelogDataProvider
 import net.mullvad.mullvadvpn.viewmodel.AccountViewModel
+import net.mullvad.mullvadvpn.viewmodel.AutoConnectAndLockdownModeViewModel
 import net.mullvad.mullvadvpn.viewmodel.ChangelogViewModel
 import net.mullvad.mullvadvpn.viewmodel.ConnectViewModel
 import net.mullvad.mullvadvpn.viewmodel.DeviceListViewModel
@@ -100,7 +101,6 @@ val uiModule = module {
     single { NewDeviceNotificationUseCase(get()) }
     single { PortRangeUseCase(get()) }
     single { RelayListUseCase(get(), get()) }
-
     single { InAppNotificationController(get(), get(), get(), get(), MainScope()) }
 
     single<IChangelogDataProvider> { ChangelogDataProvider(get()) }
@@ -136,6 +136,7 @@ val uiModule = module {
     viewModel { SettingsViewModel(get(), get()) }
     viewModel { VoucherDialogViewModel(get(), get()) }
     viewModel { VpnSettingsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { AutoConnectAndLockdownModeViewModel(get()) }
     viewModel { WelcomeViewModel(get(), get(), get(), get()) }
     viewModel { ReportProblemViewModel(get(), get()) }
     viewModel { ViewLogsViewModel(get()) }
