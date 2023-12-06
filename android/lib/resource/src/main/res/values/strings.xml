@@ -217,6 +217,7 @@
     <string name="custom_dns_disable_mode_subtitle">
         <![CDATA[Disable all <b>%s</b> above to activate this setting.]]>
     </string>
+    <string name="vpn_setting">VPN settings not available on this device</string>
     <string name="settings_changes_effect_warning_short">DNS settings might not go into effect immediately</string>
     <string name="settings_changes_effect_warning_content_blocker">Changes to DNS related settings might not go into effect immediately due to cached results.</string>
     <string name="manage_account">Manage account</string>
