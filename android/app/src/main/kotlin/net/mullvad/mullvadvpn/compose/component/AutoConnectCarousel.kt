@@ -73,14 +73,13 @@ fun AutoConnectCarousel() {
                             when (page) {
                                 0 -> R.string.carousel_slide_1_text_1
                                 1 -> R.string.carousel_slide_2_text_1
-                                else -> R.string.carousel_slide_3_text_1
+                                else -> R.string.carousel_slide_3_text_1a
                             }
                     ),
                 textSize = 16.sp.value,
                 textColor =
                     MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription).toArgb()
             )
-
             if (page != 0) {
                 IconButton(
                     modifier =
@@ -101,7 +100,6 @@ fun AutoConnectCarousel() {
                     )
                 }
             }
-
             Image(
                 modifier =
                     Modifier.padding(top = 18.dp, bottom = 3.dp).constrainAs(imageRef) {
