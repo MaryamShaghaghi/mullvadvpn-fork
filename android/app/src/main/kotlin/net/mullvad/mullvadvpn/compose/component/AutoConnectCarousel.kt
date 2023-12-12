@@ -113,10 +113,10 @@ fun AutoConnectCarousel() {
                         0 -> painterResource(id = R.drawable.carousel_slide_1_cogwheel)
                         1 -> painterResource(id = R.drawable.carousel_slide_2_always_on)
                         else -> painterResource(id = R.drawable.carousel_slide_3_block_connections)
-                    },
-                contentDescription = null,
-            )
 
+                    },
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription)
+            )
             if (page != 2) {
                 IconButton(
                     modifier =
