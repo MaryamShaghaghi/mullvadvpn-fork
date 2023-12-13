@@ -1,5 +1,5 @@
 //
-//  RESTTransportStrategy.swift
+//  TransportStrategy.swift
 //  MullvadREST
 //
 //  Created by Marco Nikic on 2023-04-27.
@@ -15,6 +15,8 @@ public struct TransportStrategy: Equatable {
         case useURLSession
         /// Suggests connecting via Shadowsocks proxy
         case useShadowsocks
+        /// Suggests connecting via socks proxy
+        case useSocks5
     }
 
     /// The internal counter for suggested transports.
