@@ -73,13 +73,14 @@ fun AutoConnectCarousel() {
                             when (page) {
                                 0 -> R.string.carousel_slide_1_text_1
                                 1 -> R.string.carousel_slide_2_text_1
-                                else -> R.string.carousel_slide_3_text_1a
+                                else -> R.string.carousel_slide_3_text_1
                             }
                     ),
                 textSize = 16.sp.value,
                 textColor =
                     MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription).toArgb()
             )
+
             if (page != 0) {
                 IconButton(
                     modifier =
@@ -100,6 +101,7 @@ fun AutoConnectCarousel() {
                     )
                 }
             }
+
             Image(
                 modifier =
                     Modifier.padding(top = 18.dp, bottom = 3.dp).constrainAs(imageRef) {
@@ -113,10 +115,10 @@ fun AutoConnectCarousel() {
                         0 -> painterResource(id = R.drawable.carousel_slide_1_cogwheel)
                         1 -> painterResource(id = R.drawable.carousel_slide_2_always_on)
                         else -> painterResource(id = R.drawable.carousel_slide_3_block_connections)
-
                     },
-                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = AlphaDescription)
+                contentDescription = null,
             )
+
             if (page != 2) {
                 IconButton(
                     modifier =
